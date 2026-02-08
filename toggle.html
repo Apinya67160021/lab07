@@ -3,24 +3,60 @@
   <head>
     <title>Interactive Menu</title>
     <style>
+      /* ซ่อนเมนู */
       .menu-nav.hidden {
         display: none;
       }
+
+      header {
+        background-color: rgb(219, 185, 212);
+        padding: 10px;
+      }
+
+      /* ปุ่มเมนู */
+      #menu-toggle {
+        cursor: pointer;
+        padding: 8px 12px;
+        background-color: rgb(200, 160, 190);
+        border: none;
+        font-size: 16px;
+      }
+
+      /* เมนู */
       nav {
         background-color: rgb(219, 185, 212);
         padding: 5px;
+        width: 200px;
       }
 
-      a:hover {
+      /* ลิงก์เมนู */
+      .menu-nav a {
+        display: block;
+        padding: 8px;
+        text-decoration: none;
+        color: black;
+      }
+
+      .menu-nav a:hover {
         background-color: rgb(230, 220, 228);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        nav {
+          width: 100%;
+        }
       }
     </style>
   </head>
+
   <body>
     <!-- Header with toggle button -->
     <header>
-      <button id="menu-toggle">☰ Menu</button>
-      <nav class="menu-nav">
+      <button id="menu-toggle">☰ Open Menu</button>
+
+      <!-- เริ่มต้นซ่อนเมนู -->
+      <nav class="menu-nav hidden">
         <a href="#home">Home</a>
         <a href="#about">About</a>
         <a href="#services">Services</a>
@@ -28,32 +64,37 @@
         <a href="#contact">Contact</a>
       </nav>
     </header>
+
     <!-- Main content -->
     <main>
       <h1>Welcome</h1>
       <p>Your content here...</p>
     </main>
+
     <script>
       // 1. Select the button and nav elements
       const button = document.querySelector("#menu-toggle");
       const nav = document.querySelector(".menu-nav");
+
       // 2. Add click event listener to the button
       button.addEventListener("click", () => {
         // 3. Toggle the 'hidden' class on nav
         nav.classList.toggle("hidden");
-        // 4. Optional: Change button text based on state
+
+        // 4. Change button text based on state
         if (nav.classList.contains("hidden")) {
           button.textContent = "☰ Open Menu";
         } else {
           button.textContent = "✕ Close Menu";
         }
       });
-      // 5. Optional: Close menu when a link is clicked
+
+      // 5. Close menu when a link is clicked
       const links = document.querySelectorAll(".menu-nav a");
       links.forEach((link) => {
         link.addEventListener("click", () => {
           nav.classList.add("hidden");
-          button.textContent = "☰ Open Menu"; // Reset button
+          button.textContent = "☰ Open Menu";
         });
       });
     </script>
