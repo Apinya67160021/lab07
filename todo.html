@@ -3,62 +3,140 @@
   <head>
     <title>Todo List</title>
     <style>
-      /* นิสิตเขียนเอง */
+      /* Container */
+      .todo-container {
+        max-width: 400px;
+        margin: 40px auto;
+        font-family: sans-serif;
+      }
+      /* Input */
+      #new-todo {
+        padding: 8px;
+        width: 70%;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      /* Add button */
+      #add-btn {
+        padding: 8px 12px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      #add-btn:hover {
+        background-color: #45a049;
+      }
+
+      /* Todo list */
+      #todo-list {
+        list-style: none;
+        padding: 0;
+        margin-top: 20px;
+      }
+
+      .todo-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .todo-item span {
+        flex: 1;
+        margin-left: 8px;
+      }
+
+      /* Completed */
+      .todo-item.completed span {
+        text-decoration: line-through;
+        opacity: 0.6;
+      }
+
+      /* Delete button */
+      .delete-btn {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        cursor: pointer;
+      }
     </style>
   </head>
+
   <body>
     <div class="todo-container">
-     <input type="text" 
-     name="" 
-     id="new-todo" 
-     placeholder="Enter a new todo"
-     >
+      <!-- Input -->
+      <input type="text" id="new-todo" placeholder="Enter a new todo..." />
 
+      <!-- FIX: id ต้องตรงกับ JS -->
+      <button id="add-btn">Add</button>
 
-     <button id="and-btn">Add</button>
-      <!-- Todo list (ul/ol) -->
-       <ul id="todo-list">
-        <li class="todo-item"><span>todo 1</span><button class="delete-btn">X</button></li>
-        <li class="todo-item"><span>todo 2</span><button class="delete-btn">X</button></li>
+      <!-- Todo list -->
+      <ul id="todo-list">
+        <li class="todo-item">
+          <input type="checkbox" />
+          <span>todo 1</span>
+          <button class="delete-btn">✕</button>
+        </li>
+        <li class="todo-item">
+          <input type="checkbox" />
+          <span>todo 2</span>
+          <button class="delete-btn">✕</button>
+        </li>
+      </ul>
     </div>
+
     <script>
-            // 1. Select elements
+      // 1. Select elements
       const input = document.querySelector("#new-todo");
-      const addBtn = document.querySelector("#btn-add");
+      const addBtn = document.querySelector("#add-btn"); // FIX id
       const todoList = document.querySelector("#todo-list");
+
       // 2. Add event listener on button
-      addBtn.addEventListener('click', () => {
-       const text = input.value.trim();
-       // Validate: not empty
-       if (!text) return;
-       // Create new li
-       const li = document.createElement('li');
-       li.classList.add('todo-item');
-       li.innerHTML = `
-       <span>${text}</span>
-       <button class="delete-btn">✕</button>
-       `;
-       // Add to list
-       todoList.appendChild(li);
-       // Clear input
-       input.value = '';
-       input.focus();
+      addBtn.addEventListener("click", () => {
+        const text = input.value.trim();
+
+        // ป้องกันการเพิ่ม todo ว่าง
+        if (!text) return;
+
+        // สร้าง li ใหม่
+        const li = document.createElement("li");
+        li.classList.add("todo-item");
+
+        li.innerHTML = `
+          <input type="checkbox">
+          <span>${text}</span>
+          <button class="delete-btn">✕</button>
+        `;
+
+        // เพิ่มเข้า list
+        todoList.appendChild(li);
+
+        // ล้าง input
+        input.value = "";
+        input.focus();
       });
-      // 3. Event delegation on list
-      todoList.addEventListener('click', (event) => {
-       // Check if delete button clicked
-       if (event.target.classList.contains('delete-btn')) {
-       const li = event.target.parentElement;
-       li.remove();
-       }
+
+      // 3. Event delegation (delete)
+      todoList.addEventListener("click", (event) => {
+        if (event.target.classList.contains("delete-btn")) {
+          const li = event.target.parentElement;
+          li.remove();
+        }
       });
-      // 4. Optional: Mark complete
-      todoList.addEventListener('change', (event) => {
-       if (event.target.type === 'checkbox') {
-       const li = event.target.parentElement;
-       li.classList.toggle('completed');
-       }
-      }
+
+      // 4. Mark complete
+      todoList.addEventListener("change", (event) => {
+        if (event.target.type === "checkbox") {
+          const li = event.target.parentElement;
+          li.classList.toggle("completed");
+        }
+      });
     </script>
   </body>
 </html>
