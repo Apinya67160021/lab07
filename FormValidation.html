@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Registration Form</title>
+    <style>
+      /* Form */
+      #register-form {
+        width: 400px;
+        margin: 40px auto;
+        font-family: sans-serif;
+      }
+
+      label {
+        display: block;
+        margin-top: 12px;
+      }
+
+      input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 4px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      /* Error & valid state */
+      .error {
+        border-color: red;
+        background-color: #ffe0e0;
+      }
+
+      .valid {
+        border-color: green;
+        background-color: #e0ffe0;
+      }
+
+      /* Error message */
+      .error-message {
+        color: red;
+        font-size: small;
+        display: none;
+      }
+
+      .error-message.show {
+        display: block;
+      }
+
+      /* Submit button */
+      button {
+        margin-top: 20px;
+        padding: 10px;
+        width: 100%;
+        cursor: pointer;
+      }
+
+      button[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+
+  <body>
+    <form id="register-form">
+      <!-- Name -->
+      <label>
+        Name
+        <input type="text" name="name" />
+        <span class="error-message error-name"></span>
+      </label>
+
+      <!-- Email -->
+      <label>
+        Email
+        <input type="email" name="email" />
+        <span class="error-message error-email"></span>
+      </label>
+
+      <!-- Password -->
+      <label>
+        Password
+        <input type="password" name="password" />
+        <span class="error-message error-password"></span>
+      </label>
+
+      <!-- Confirm password -->
+      <label>
+        Confirm Password
+        <input type="password" name="confirm-password" />
+        <span class="error-message error-confirm"></span>
+      </label>
+
+      <!-- Submit -->
+      <button type="submit" disabled>Register</button>
+    </form>
+
+    <script>
+      // 1. Select elements
+      const form = document.querySelector("#register-form");
+
+      const nameInput = form.querySelector('input[name="name"]');
+      const emailInput = form.querySelector('input[name="email"]');
+      const passwordInput = form.querySelector('input[name="password"]');
+      const confirmInput = form.querySelector('input[name="confirm-password"]');
+      const submitBtn = form.querySelector('button[type="submit"]');
+
+      const nameError = form.querySelector(".error-name");
+      const emailError = form.querySelector(".error-email");
+      const passwordError = form.querySelector(".error-password");
+      const confirmError = form.querySelector(".error-confirm");
+
+      // 2. Validation functions
+      function validateName(value) {
+        return value.trim().length >= 3;
+      }
+
+      function validateEmail(value) {
+        return value.includes("@") && value.includes(".");
+      }
+
+      function validatePassword(value) {
+        return value.length >= 8;
+      }
+
+      function validateConfirmPassword(pwd, confirm) {
+        return pwd === confirm && confirm !== "";
+      }
+
+      // 3. Check overall form validity
+      function isFormValid() {
+        return (
+          validateName(nameInput.value) &&
+          validateEmail(emailInput.value) &&
+          validatePassword(passwordInput.value) &&
+          validateConfirmPassword(passwordInput.value, confirmInput.value)
+        );
+      }
+
+      // 4. Update UI (real-time)
+      function updateUI() {
+        // Name
+        if (validateName(nameInput.value)) {
+          nameInput.classList.add("valid");
+          nameInput.classList.remove("error");
+          nameError.classList.remove("show");
+        } else {
+          nameInput.classList.add("error");
+          nameInput.classList.remove("valid");
+          nameError.textContent = "Name must be at least 3 characters";
+          nameError.classList.add("show");
+        }
+
+        // Email
+        if (validateEmail(emailInput.value)) {
+          emailInput.classList.add("valid");
+          emailInput.classList.remove("error");
+          emailError.classList.remove("show");
+        } else {
+          emailInput.classList.add("error");
+          emailInput.classList.remove("valid");
+          emailError.textContent = "Please enter a valid email";
+          emailError.classList.add("show");
+        }
+
+        // Password
+        if (validatePassword(passwordInput.value)) {
+          passwordInput.classList.add("valid");
+          passwordInput.classList.remove("error");
+          passwordError.classList.remove("show");
+        } else {
+          passwordInput.classList.add("error");
+          passwordInput.classList.remove("valid");
+          passwordError.textContent = "Password must be at least 8 characters";
+          passwordError.classList.add("show");
+        }
+
+        // Confirm password
+        if (validateConfirmPassword(passwordInput.value, confirmInput.value)) {
+          confirmInput.classList.add("valid");
+          confirmInput.classList.remove("error");
+          confirmError.classList.remove("show");
+        } else {
+          confirmInput.classList.add("error");
+          confirmInput.classList.remove("valid");
+          confirmError.textContent = "Passwords do not match";
+          confirmError.classList.add("show");
+        }
+
+        // Enable / disable submit
+        submitBtn.disabled = !isFormValid();
+      }
+
+      // 5. Real-time validation
+      nameInput.addEventListener("input", updateUI);
+      emailInput.addEventListener("input", updateUI);
+      passwordInput.addEventListener("input", updateUI);
+      confirmInput.addEventListener("input", updateUI);
+
+      // 6. Submit handler
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        if (isFormValid()) {
+          alert("Form submitted successfully!");
+          form.reset();
+          updateUI();
+        }
+      });
+
+      // 7. Initial state
+      updateUI();
+    </script>
+  </body>
+</html>
